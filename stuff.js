@@ -5,5 +5,4 @@ function initialize() {
 function display() {
     document.createElement("p");
     document.createElement("p");
-
 }
