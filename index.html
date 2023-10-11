@@ -1,38 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hot and Cold</title>
+  <title>Hot and Cold Game</title>
 </head>
 <body>
     <style>
+        .commit{
+            font-size: large;
+            background-color: blanchedalmond;
+            color: black;
+        }
         button {
             font-size: large;
             color: blanchedalmond;
             background-color: black;
         }
-        h2{
+        h1{
             font-family: cursive;
             font-size: xx-large;
         }
-        h3{
-            font-size: larger;
+        h2{
+            font-family: cursive;
+            font-size: 30px;
+        }
+        p{
+            font-size: xx-large;
             font-family: cursive; 
         }
     </style>
-    <img src="https://media.istockphoto.com/id/1280905159/vector/hot-and-cold-icon-fire-and-snowflake-sign-heating-and-cooling-button-vector-eps-10-isolated.jpg?s=170667a&w=0&k=20&c=nrYF9BIq6zpRMgVCkVY2h6wh99F_wQJnH6s5LhjxkJY=" alt="Your number hot/Cold">
-    <Nav>
+  <h1>Hot and Cold</h1>
+  <img src="https://media.istockphoto.com/id/1280905159/vector/hot-and-cold-icon-fire-and-snowflake-sign-heating-and-cooling-button-vector-eps-10-isolated.jpg?s=170667a&w=0&k=20&c=nrYF9BIq6zpRMgVCkVY2h6wh99F_wQJnH6s5LhjxkJY=" alt="Your number hot/Cold">
+  <p>Guess the hidden number between 1 and 100!</p>
+  <p>Number of Guesses Remaining: <span id="guesses">5</span></p>
+  <h2>Your Guess: <input type="number" id="userGuess" min="1" max="100">
+  <br>
+    <button onclick = "subtract(25)">subtract 25</button> <button onclick = "subtract(10)">subtract 10</button> <button onclick = "subtract(5)">subtract 5</button> <button onclick = "subtract(1)">subtract 1</button>
+    <button style="font-size: large;
+    background-color: blanchedalmond;
+    color: black;" onclick = "commitGuess()">commit</button>
+    <button onclick = "add(1)">add 1</button> <button onclick = "add(5)">add 5</button> <button onclick = "add(10)">add 10</button> <button onclick = "add(25)">add 25</button> 
+  </h2>
+  <br> 
+  <h2>Past Guesses:</h2>
+  <div id="guessLog"></div>
+  <p>Result: <span id="response"></span></p>
+  <button onclick="stuff()">Reset</button>
 
-    </Nav>
-    <div id = "number"><h2>50</h2></div>
-    <button>subtract 25</button> <button>subtract 10</button> <button>subtract 5</button> <button>subtract 1</button>
-    <button>reset</button>
-    <button>add 1</button> <button>add 5</button> <button>add 10</button> <button>add 25</button> 
-    <br> <br>
-    <button>commit</button>
-    <div id = "distance"><h3>your number is too high</h3></div>
-    <div id = "guesses"><h3>you have 5 guesses left</h3></div>
+  <script>
+    let hiddenNumber;
+let remainingGuesses;
+let currentGuess = 50;
+let guessLog = "";
+
+function startGame() {
+  hiddenNumber = Math.floor(Math.random() * 100) + 1;
+  remainingGuesses = 5;
+  guessLog = "";
+  document.getElementById('guesses').textContent = remainingGuesses;
+  document.getElementById('guessLog').innerHTML = '';
+  document.getElementById('response').textContent = '';
+  document.getElementById('userGuess').value = currentGuess;
+}
+
+function subtract(amount) {
+  currentGuess -= amount;
+  if (currentGuess < 1) currentGuess = 1;
+  document.getElementById('userGuess').value = currentGuess;
+}
+
+function add(numbe) {
+  currentGuess += numbe;
+  if (currentGuess > 100) currentGuess = 100;
+  document.getElementById('userGuess').value = currentGuess;
+}
+
+function commitGuess() {
+  const userGuess = parseInt(document.getElementById('userGuess').value);
+
+  if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+    alert('Please enter a valid number between 1 and 100.');
+    return;
+  }
+
+  const difference = Math.abs(userGuess - hiddenNumber);
+
+  if (difference === 0) {
+    document.getElementById('response').textContent = "Congratulations! You've won!;"
+  } else {
+    let response = '';
+
+    if (difference <= 5) {
+      response = 'Very Hot';
+    } else if (difference <= 8) {
+      response = 'Hot';
+    } else if (difference <= 15) {
+      response = 'Very Warm';
+    } else if (difference <= 20) {
+      response = 'Warm';
+    } else if (difference <= 30) {
+      response = 'Cool';
+    } else if (difference <= 40) {
+      response = 'Very Cool';
+    } else if (difference <= 55) {
+      response = 'Cold';
+    } else {
+      response = 'Very Cold';
+    }
+
+    remainingGuesses--;
+
+    if (response === 'Very Hot') {
+      guessLog += `Guess ${userGuess}: ${response}`;
+    } else {
+      guessLog += `Guess ${userGuess}: ${response}, ${remainingGuesses} guesses remaining`;
+    }
+
+    document.getElementById('guesses').textContent = remainingGuesses;
+    document.getElementById('response').textContent = response;
+
+    if (remainingGuesses === 0) {
+      document.getElementById('response').textContent = `You've lost. The number was ${hiddenNumber}.`;
+    }
+
+    document.getElementById('guessLog').innerHTML = guessLog;
+  }
+}
+
+function stuff() {
+  startGame();
+}
+startGame();
+</script>
 </body>
 </html>
