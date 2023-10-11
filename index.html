@@ -110,9 +110,9 @@ function commitGuess() {
     remainingGuesses--;
 
     if (response === 'Very Hot') {
-      guessLog += `Guess ${userGuess}: ${response}`;
+      guessLog += ` Guess ${userGuess}: ${response}`;
     } else {
-      guessLog += `Guess ${userGuess}: ${response}, ${remainingGuesses} guesses remaining`;
+      guessLog += ` Guess ${userGuess}: ${response}, ${remainingGuesses} guesses remaining`;
     }
 
     document.getElementById('guesses').textContent = remainingGuesses;
